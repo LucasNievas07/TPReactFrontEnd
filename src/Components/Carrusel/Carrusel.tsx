@@ -25,7 +25,7 @@ export const Carrusel = () => {
       <Carousel data-bs-theme="dark" style={{marginLeft:'10%', marginRight:'10%'}}>
         {data.map((item, index) => (
           <Carousel.Item key={index}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center',  height:'60vh', marginBottom:'5rem' }}>
               <CarruselCard
                 id={item.id}
                 imagen={item.imagen}

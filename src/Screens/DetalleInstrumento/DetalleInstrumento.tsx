@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { InstrumentoCompleto } from "../../Components/Instrumento/InstrumentoCompleto";
+import FadeInContent from "../FadeInContent/FadeInContent ";
 
 export const DetalleInstrumento = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,7 +23,9 @@ export const DetalleInstrumento = () => {
 
   return (
     <>
-      {item && <InstrumentoCompleto key={item.id} item={item} />}
+      <FadeInContent>
+        {item && <InstrumentoCompleto key={item.id} item={item} />}
+      </FadeInContent>
     </>
   );
 };
