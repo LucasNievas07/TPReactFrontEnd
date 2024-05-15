@@ -27,8 +27,6 @@ export const Instrumento: React.FC<InstrumentoProps> = ({ item }) => {
 
     handleResize();
 
-    window.addEventListener('resize', handleResize);
-
     return () => {
       window.removeEventListener('resize', handleResize);
     };

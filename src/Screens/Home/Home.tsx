@@ -1,4 +1,3 @@
-import React from 'react';
 import { Typography } from "@mui/material";
 import { Carrusel } from "../../Components/Carrusel/Carrusel";
 import FadeInContent from '../FadeInContent/FadeInContent ';

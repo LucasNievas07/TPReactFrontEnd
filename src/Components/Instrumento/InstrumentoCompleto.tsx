@@ -1,13 +1,17 @@
-import * as React from 'react';
+import React, { useContext } from 'react';
 import { InstrumentoProps } from "../../Types/InstrumentoProps";
-import { Button, CardActions, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Button, CardContent, CardMedia, Grid, Typography } from '@mui/material';
 import Card from '@mui/joy/Card';
 import { FaTruck } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
+import { CarritoContext } from '../../Context/CarritoContext';
 
 export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
   const [dimensions, setDimensions] = React.useState({ width: 0.1, height: 0.1 });
   const cardRef = React.useRef<HTMLDivElement>(null);
+  const { agregarAlCarrito, obtenerCantidadEnCarrito } = useContext(
+    CarritoContext
+  );
 
   React.useEffect(() => {
     const handleResize = () => {
@@ -18,8 +22,6 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
     };
 
     handleResize();
-
-    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -108,10 +110,11 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
                   },
                 },
               }}
+              onClick={() => agregarAlCarrito(item)}
             >
               <IoBagCheckOutline fontSize={'1.5vw'} />
               <Typography className='carrito_button' variant='button' sx={{marginLeft:'0.5vw'}}>
-                Agregar al carrito
+                AGREGAR AL CARRITO ({obtenerCantidadEnCarrito(item.id)})
               </Typography>
             </Button>
           </CardContent>

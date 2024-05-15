@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 const pages = [
   { name: 'Home', path: '/' },
   { name: 'Donde Estamos', path: '/donde-estamos' },
-  { name: 'Productos', path: '/productos' }
+  { name: 'Productos', path: '/productos' },
+  {name: 'Carrito', path: '/carrito'}
 ];
 
 export function Navbar() {

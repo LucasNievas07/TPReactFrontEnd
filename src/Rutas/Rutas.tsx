@@ -4,6 +4,7 @@ import { DondeEstamos } from '../Screens/DondeEstamos/DondeEstamos';
 import { Productos } from '../Screens/Productos/Productos';
 import { DetalleInstrumento } from '../Screens/DetalleInstrumento/DetalleInstrumento';
 import Navbar from '../Components/Navbar/Navbar';
+import { Carrito } from '../Screens/Carrito/Carrito';
 
 export const Rutas = () => (
   <Router>
@@ -14,6 +15,7 @@ export const Rutas = () => (
         <Route path="/donde-estamos" element={<DondeEstamos />} />
         <Route path="/productos" element={<Productos />} />
         <Route path="/instrumento/:id" element={<DetalleInstrumento />} />
+        <Route path="/carrito" element={<Carrito/>}/>
       </Routes>
     </div>
   </Router>
