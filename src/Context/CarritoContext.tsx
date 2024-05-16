@@ -13,8 +13,10 @@ export type CarritoItemType = {
   cantidadVendida: string;
   descripcion: string;
   categoria: Categoria | null;
-  cantidad: number; // Agregamos la propiedad cantidad al item del carrito
+  cantidad: number;
+  pedidoId?: number; // Agregamos la propiedad pedidoId para almacenar el ID del pedido
 };
+
 
 export type Categoria = {
   id: number | null;
@@ -34,4 +36,3 @@ export const CarritoContext = React.createContext<CarritoContextType>({
   obtenerCantidadEnCarrito: (id: number) => 0,
   vaciarCarrito: () => {}, // Inicialización de la nueva función
 });
-

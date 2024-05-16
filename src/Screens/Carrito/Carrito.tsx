@@ -4,6 +4,7 @@ import { CarritoContext } from '../../Context/CarritoContext';
 import { postData } from '../../Api/genericCalls';
 import { Pedido, PedidoDetalle } from '../../Types/InstrumentoProps';
 import FadeInContent from '../FadeInContent/FadeInContent ';
+import useFetch from '../../Hook/useFetch';
 
 export const Carrito: React.FC = () => {
     const { carrito, vaciarCarrito } = useContext(CarritoContext);
@@ -14,7 +15,6 @@ export const Carrito: React.FC = () => {
     }, 0);
 
     const realizarPedido = async () => {
-        // Aquí puedes preparar los datos del pedido para enviar al backend
         const pedido: Pedido = {
             fechaPedido: new Date(),
             totalPedido: precioTotal,
@@ -23,9 +23,40 @@ export const Carrito: React.FC = () => {
                 instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
             })),
         };
-        await postData<Pedido>("http://localhost:8080/pedido/create", pedido);
-        console.log(pedido);
+    
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(pedido)
+        };
+    
+        try {
+            const apiResponse = await fetch("http://localhost:8080/pedido/createPedido", options);
+            const data = await apiResponse.json();
+    
+            if (!apiResponse.ok) {
+                console.error("Hubo un error al crear el pedido:", data.error);
+            } else {
+                console.log("Pedido creado con éxito:", data);
+                // Actualizar el pedidoId en los detalles del pedido
+                const pedidoId = data.id;
+                const detallesPedido = carrito.map(({ id, cantidad, precio, instrumento, marca, modelo, imagen, costoEnvio, cantidadVendida, descripcion, categoria }): PedidoDetalle => ({
+                    cantidad: cantidad,
+                    instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
+                    pedidoId: pedidoId,
+                }));
+                // Aquí puedes enviar los detalles actualizados a tu backend
+                // Por ejemplo, mediante otra solicitud fetch
+                console.log("Detalles del pedido:", detallesPedido);
+            }
+        } catch (error) {
+            console.error("Hubo un error en la solicitud:", error);
+        }
     };
+    
+    
 
     return (
         <FadeInContent>
@@ -74,3 +105,4 @@ export const Carrito: React.FC = () => {
         </FadeInContent>
     );
 };
+
