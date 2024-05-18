@@ -1,13 +1,12 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Typography, Card, CardContent, Button } from '@mui/material';
 import { CarritoContext } from '../../Context/CarritoContext';
-import { postData } from '../../Api/genericCalls';
 import { Pedido, PedidoDetalle } from '../../Types/InstrumentoProps';
 import FadeInContent from '../FadeInContent/FadeInContent ';
-import useFetch from '../../Hook/useFetch';
 
 export const Carrito: React.FC = () => {
     const { carrito, vaciarCarrito } = useContext(CarritoContext);
+    const [pedidoGuardadoId, setPedidoGuardadoId] = useState<string | null>(null);
 
     const precioTotal = carrito.reduce((total, { precio, cantidad, costoEnvio }) => {
         const costoEnvioNumerico = costoEnvio === 'G' ? 0 : Number(costoEnvio);
@@ -33,30 +32,27 @@ export const Carrito: React.FC = () => {
         };
     
         try {
-            const apiResponse = await fetch("http://localhost:8080/pedido/createPedido", options);
+            const apiResponse = await fetch("http://localhost:8080/pedido/create", options);
             const data = await apiResponse.json();
     
-            if (!apiResponse.ok) {
-                console.error("Hubo un error al crear el pedido:", data.error);
-            } else {
-                console.log("Pedido creado con éxito:", data);
-                // Actualizar el pedidoId en los detalles del pedido
-                const pedidoId = data.id;
-                const detallesPedido = carrito.map(({ id, cantidad, precio, instrumento, marca, modelo, imagen, costoEnvio, cantidadVendida, descripcion, categoria }): PedidoDetalle => ({
-                    cantidad: cantidad,
-                    instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
-                    pedidoId: pedidoId,
-                }));
-                // Aquí puedes enviar los detalles actualizados a tu backend
-                // Por ejemplo, mediante otra solicitud fetch
-                console.log("Detalles del pedido:", detallesPedido);
-            }
+            console.log("Pedido creado con éxito:", data);
+            const pedidoId = data.id;
+            setPedidoGuardadoId(pedidoId);
+            const detallesPedido = carrito.map(({ id, cantidad, precio, instrumento, marca, modelo, imagen, costoEnvio, cantidadVendida, descripcion, categoria }): PedidoDetalle => ({
+                cantidad: cantidad,
+                instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
+                pedidoId: pedidoId
+            }));
+            console.log("Detalles del pedido:", detallesPedido);
+    
+            // Mostrar alerta con el id del pedido guardado
+            alert(`El pedido con id ${pedido} se guardó correctamente`);
+            vaciarCarrito();
+    
         } catch (error) {
             console.error("Hubo un error en la solicitud:", error);
         }
     };
-    
-    
 
     return (
         <FadeInContent>
@@ -85,19 +81,17 @@ export const Carrito: React.FC = () => {
                     })
                 )}
                 <Typography variant="h5">Precio total: ${precioTotal}</Typography>
-                <Button 
-                    variant="contained" 
-                    color="primary" 
+                <Button
+                    variant="contained"
+                    color="primary"
+                    disabled={carrito.length === 0}
                     sx={{
                         '&:hover': {
                             backgroundColor: 'white',
                             color: '#1976D2',
                         },
                     }}
-                    onClick={() => {
-                        realizarPedido();
-                        vaciarCarrito();
-                    }}
+                    onClick={realizarPedido}
                 >
                     Realizar pedido
                 </Button>
@@ -105,4 +99,3 @@ export const Carrito: React.FC = () => {
         </FadeInContent>
     );
 };
-
