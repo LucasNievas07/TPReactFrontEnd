@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
 import { InstrumentoProps } from "../../Types/InstrumentoProps";
-import { Button, CardContent, CardMedia, Grid, Typography } from '@mui/material';
+import { Button, CardContent, CardMedia, Grid, Typography, IconButton } from '@mui/material';
 import Card from '@mui/joy/Card';
 import { FaTruck } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { CarritoContext } from '../../Context/CarritoContext';
+import { Add, Remove } from '@mui/icons-material';
 
 export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
   const [dimensions, setDimensions] = React.useState({ width: 0.1, height: 0.1 });
   const cardRef = React.useRef<HTMLDivElement>(null);
-  const { agregarAlCarrito, obtenerCantidadEnCarrito } = useContext(
+  const { agregarAlCarrito, reducirCantidadCarrito, obtenerCantidadEnCarrito } = useContext(
     CarritoContext
   );
 
@@ -97,26 +98,29 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
                 </Grid>
               )}
             </Grid>
-            <Button
-              variant="outlined"
-              size="small"
-              color="primary"
-              sx={{
-                '&:hover': {
-                  backgroundColor: '#1976D2',
-                  color: 'white',
-                  '& .carrito_button': {
-                    color: 'white',
-                  },
-                },
-              }}
-              onClick={() => agregarAlCarrito(item)}
-            >
-              <IoBagCheckOutline fontSize={'1.5vw'} />
-              <Typography className='carrito_button' variant='button' sx={{marginLeft:'0.5vw'}}>
-                AGREGAR AL CARRITO ({obtenerCantidadEnCarrito(item.id)})
-              </Typography>
-            </Button>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item>
+                <IconButton
+                  color="primary"
+                  onClick={() => reducirCantidadCarrito(item.id)}
+                >
+                  <Remove />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Typography variant="body1">
+                  {obtenerCantidadEnCarrito(item.id)}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <IconButton
+                  color="primary"
+                  onClick={() => agregarAlCarrito(item)}
+                >
+                  <Add />
+                </IconButton>
+              </Grid>
+            </Grid>
           </CardContent>
         </Card>
       </Grid>

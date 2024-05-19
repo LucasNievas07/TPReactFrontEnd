@@ -42,5 +42,5 @@ export interface PedidoDetalle {
     id?: number;
     cantidad: number;
     instrumento: InstrumentoNoItem;
-    pedidoId?: number; // Agregamos la propiedad pedidoId al PedidoDetalle
+    pedido: { id: number }; // Modificamos para incluir el objeto pedido con id
 }

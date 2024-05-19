@@ -1,6 +1,7 @@
+// CarritoProvider.tsx
 import React, { useState, useEffect, ReactNode } from 'react';
 import { InstrumentoProps } from '../Types/InstrumentoProps';
-import { CarritoItemType, Categoria, CarritoContext } from './CarritoContext'; // Importa CarritoContext
+import { CarritoItemType, Categoria, CarritoContext } from './CarritoContext';
 
 export const CarritoProvider: React.FC<CarritoProviderProps> = ({ children }) => {
   const [carrito, setCarrito] = useState<CarritoItemType[]>(() => {
@@ -21,6 +22,21 @@ export const CarritoProvider: React.FC<CarritoProviderProps> = ({ children }) =>
     }
   };
 
+  const reducirCantidadCarrito = (id: number) => {
+    const itemEnCarrito = carrito.find((i) => i.id === id);
+    if (itemEnCarrito) {
+      if (itemEnCarrito.cantidad > 1) {
+        setCarrito(carrito.map((i) => i.id === id ? { ...i, cantidad: i.cantidad - 1 } : i));
+      } else {
+        setCarrito(carrito.filter((i) => i.id !== id));
+      }
+    }
+  };
+
+  const eliminarDelCarrito = (id: number) => {
+    setCarrito(carrito.filter((i) => i.id !== id));
+  };
+
   const obtenerCantidadEnCarrito = (id: number) => {
     const itemEnCarrito = carrito.find((i) => i.id === id);
     return itemEnCarrito ? itemEnCarrito.cantidad : 0;
@@ -31,7 +47,7 @@ export const CarritoProvider: React.FC<CarritoProviderProps> = ({ children }) =>
   };
 
   return (
-    <CarritoContext.Provider value={{ carrito, agregarAlCarrito, obtenerCantidadEnCarrito, vaciarCarrito }}>
+    <CarritoContext.Provider value={{ carrito, agregarAlCarrito, reducirCantidadCarrito, eliminarDelCarrito, obtenerCantidadEnCarrito, vaciarCarrito }}>
       {children}
     </CarritoContext.Provider>
   );

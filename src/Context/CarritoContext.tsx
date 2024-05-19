@@ -17,7 +17,6 @@ export type CarritoItemType = {
   pedidoId?: number; // Agregamos la propiedad pedidoId para almacenar el ID del pedido
 };
 
-
 export type Categoria = {
   id: number | null;
   denominacion: string;
@@ -26,13 +25,17 @@ export type Categoria = {
 type CarritoContextType = {
   carrito: CarritoItemType[];
   agregarAlCarrito: (item: InstrumentoProps["item"]) => void;
+  reducirCantidadCarrito: (id: number) => void;
+  eliminarDelCarrito: (id: number) => void; // Nueva función para eliminar un artículo del carrito
   obtenerCantidadEnCarrito: (id: number) => number;
-  vaciarCarrito: () => void; // Nueva función para vaciar el carrito
+  vaciarCarrito: () => void;
 };
 
 export const CarritoContext = React.createContext<CarritoContextType>({
   carrito: [],
   agregarAlCarrito: () => {},
+  reducirCantidadCarrito: () => {},
+  eliminarDelCarrito: () => {}, // Inicialización de la nueva función
   obtenerCantidadEnCarrito: (id: number) => 0,
-  vaciarCarrito: () => {}, // Inicialización de la nueva función
+  vaciarCarrito: () => {},
 });

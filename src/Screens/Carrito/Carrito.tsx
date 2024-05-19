@@ -5,7 +5,7 @@ import { Pedido, PedidoDetalle } from '../../Types/InstrumentoProps';
 import FadeInContent from '../FadeInContent/FadeInContent ';
 
 export const Carrito: React.FC = () => {
-    const { carrito, vaciarCarrito } = useContext(CarritoContext);
+    const { carrito, vaciarCarrito, eliminarDelCarrito } = useContext(CarritoContext);
     const [pedidoGuardadoId, setPedidoGuardadoId] = useState<string | null>(null);
 
     const precioTotal = carrito.reduce((total, { precio, cantidad, costoEnvio }) => {
@@ -14,41 +14,55 @@ export const Carrito: React.FC = () => {
     }, 0);
 
     const realizarPedido = async () => {
+        // Crear el pedido sin detalles primero
         const pedido: Pedido = {
             fechaPedido: new Date(),
             totalPedido: precioTotal,
-            detalles: carrito.map(({ id, cantidad, precio, instrumento, marca, modelo, imagen, costoEnvio, cantidadVendida, descripcion, categoria }): PedidoDetalle => ({
-                cantidad: cantidad,
-                instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
-            })),
+            detalles: []
         };
-    
-        const options = {
+
+        const optionsPedido = {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(pedido)
         };
-    
+
         try {
-            const apiResponse = await fetch("http://localhost:8080/pedido/create", options);
-            const data = await apiResponse.json();
-    
-            console.log("Pedido creado con éxito:", data);
-            const pedidoId = data.id;
+            // Crear el pedido y obtener el ID del pedido creado
+            const apiResponsePedido = await fetch("http://localhost:8080/pedido/create", optionsPedido);
+            const dataPedido = await apiResponsePedido.json();
+
+            console.log("Pedido creado con éxito:", dataPedido);
+            const pedidoId = dataPedido.id;
             setPedidoGuardadoId(pedidoId);
-            const detallesPedido = carrito.map(({ id, cantidad, precio, instrumento, marca, modelo, imagen, costoEnvio, cantidadVendida, descripcion, categoria }): PedidoDetalle => ({
+
+            // Crear los detalles del pedido con el pedidoId
+            const detallesPedido: PedidoDetalle[] = carrito.map(({ id, cantidad, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria }) => ({
                 cantidad: cantidad,
                 instrumento: { id, instrumento, marca, modelo, imagen, precio, costoEnvio, cantidadVendida, descripcion, categoria },
-                pedidoId: pedidoId
+                pedido: { id: pedidoId }  // Aquí estamos asignando el pedidoId
             }));
-            console.log("Detalles del pedido:", detallesPedido);
-    
+
+            // Guardar los detalles del pedido en lote
+            const optionsDetalle = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(detallesPedido)
+            };
+
+            const apiResponseDetalle = await fetch("http://localhost:8080/pedido-detalle/create-batch", optionsDetalle);
+            const dataDetalle = await apiResponseDetalle.json();
+
+            console.log("Detalles del pedido creados con éxito:", dataDetalle);
+
             // Mostrar alerta con el id del pedido guardado
-            alert(`El pedido con id ${pedido} se guardó correctamente`);
+            alert(`El pedido con id ${pedidoId} se guardó correctamente`);
             vaciarCarrito();
-    
+
         } catch (error) {
             console.error("Hubo un error en la solicitud:", error);
         }
@@ -75,6 +89,14 @@ export const Carrito: React.FC = () => {
                                     <Typography variant="body1">Costo de envío: {costoEnvioNumerico === '0' ? 'Gratis' : `$${costoEnvioNumerico}`}</Typography>
                                     <Typography variant="body1">Cantidad: {cantidad}</Typography>
                                     <Typography variant="body1">Precio total: ${precioTotalItem}</Typography>
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        onClick={() => eliminarDelCarrito(id)}
+                                        sx={{ marginTop: 2 }}
+                                    >
+                                        Eliminar
+                                    </Button>
                                 </CardContent>
                             </Card>
                         );
