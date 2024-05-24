@@ -59,6 +59,19 @@ export const Carrito: React.FC = () => {
 
             console.log("Detalles del pedido creados con éxito:", dataDetalle);
 
+            // Realizar el pago con Mercado Pago
+            const apiResponsePago = await fetch("http://localhost:8080/mercadopago/create-preference", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(carrito.map(({ instrumento, cantidad, precio }) => ({ instrumento, cantidad, precio: parseFloat(precio) })))
+            });
+            const dataPago = await apiResponsePago.text();
+
+            console.log("Preferencia de pago creada con éxito:", dataPago);
+            window.location.href = dataPago;
+
             // Mostrar alerta con el id del pedido guardado
             alert(`El pedido con id ${pedidoId} se guardó correctamente`);
             vaciarCarrito();
