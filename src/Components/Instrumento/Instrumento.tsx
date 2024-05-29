@@ -26,6 +26,7 @@ export const Instrumento: React.FC<InstrumentoProps> = ({ item }) => {
     };
 
     handleResize();
+    window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
@@ -33,8 +34,11 @@ export const Instrumento: React.FC<InstrumentoProps> = ({ item }) => {
   }, []);
 
   return (
-    <Card variant="outlined" ref={cardRef} sx={{ marginTop: '2%', marginBottom: '2%', marginLeft: '8%', marginRight: '4%',
-      boxShadow: 6, display: 'flex', minWidth: '75%' }}> {/* Agrega minWidth */}
+    <Card
+      variant="outlined"
+      ref={cardRef}
+      sx={{ marginTop: '2%', marginBottom: '2%', marginLeft: '8%', marginRight: '4%',
+        boxShadow: 6, display: 'flex', minWidth: '75%' }}>
       <CardMedia
         component="img"
         sx={{ width: dimensions.width, height: dimensions.height, flexShrink: 0, objectFit: 'contain' }}
@@ -44,14 +48,14 @@ export const Instrumento: React.FC<InstrumentoProps> = ({ item }) => {
       <CardContent sx={{ flex: '1 0 auto' }}>
         <Grid container spacing={1}>
           <Grid item xs={12}>
-            <Typography variant="body2" color="text.primary" fontFamily={"Segoe UI"}>
-              <h4>{truncate(item.instrumento, 50)}</h4> {/* Limita a 30 caracteres */}
+            <Typography variant="h5" component="h5" color="text.primary" fontFamily={"Segoe UI"}>
+              {truncate(item.instrumento, 50)}
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Typography variant="body2" color="text.primary" fontFamily={"sans-serif"}>
-              <h4>$ {item.precio}</h4>
-            </Typography>          
+            <Typography variant="h4" component="h4" color="text.primary" fontFamily={"sans-serif"}>
+              $ {item.precio}
+            </Typography>
           </Grid>
           {item.costoEnvio !== 'G' && (
             <Grid item xs={12}>
@@ -66,15 +70,13 @@ export const Instrumento: React.FC<InstrumentoProps> = ({ item }) => {
             <Grid item xs={12}>
               <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', color:'#39B54A' }}>
                 <FaTruck fontSize={'1.5vw'}/>
-                <div style={{marginLeft:'0.5vw'}}>
-                  Envío gratis a todo el país
-                </div>                
+                <span style={{marginLeft:'0.5vw'}}>Envío gratis a todo el país</span>
               </Typography>
             </Grid>
           )}
           <Grid item xs={12}>
             <Typography variant="body2" color="text.primary" fontFamily={"sans-serif"}>
-              <p>{item.cantidadVendida} vendidos</p>
+              {item.cantidadVendida} vendidos
             </Typography>
           </Grid>
         </Grid>

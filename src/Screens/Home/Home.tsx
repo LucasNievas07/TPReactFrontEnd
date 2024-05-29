@@ -1,8 +1,9 @@
 import { Typography } from "@mui/material";
 import { Carrusel } from "../../Components/Carrusel/Carrusel";
 import FadeInContent from '../FadeInContent/FadeInContent ';
+import React from "react";
 
-export const Home = () => {
+export const Home: React.FC = () => {
   return (
     <FadeInContent>
       <>
@@ -16,3 +17,5 @@ export const Home = () => {
     </FadeInContent>
   );
 };
+
+export default Home;

@@ -1,45 +1,55 @@
 // CarritoProvider.tsx
 import React, { useState, useEffect, ReactNode } from 'react';
 import { InstrumentoProps } from '../Types/InstrumentoProps';
-import { CarritoItemType, Categoria, CarritoContext } from './CarritoContext';
+import { CarritoItemType, CarritoContext } from './CarritoContext';
+import { useAuth } from './AuthContext';
 
-export const CarritoProvider: React.FC<CarritoProviderProps> = ({ children }) => {
-  const [carrito, setCarrito] = useState<CarritoItemType[]>(() => {
-    const carritoGuardado = localStorage.getItem('carrito');
-    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
-  });
+export const CarritoProvider = ({ children }: { children: ReactNode }) => {
+  const { username } = useAuth();
+  const [carrito, setCarrito] = useState<CarritoItemType[]>([]);
 
   useEffect(() => {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-  }, [carrito]);
+    const storedCarrito = localStorage.getItem(`carrito_${username}`);
+    if (storedCarrito) {
+      setCarrito(JSON.parse(storedCarrito));
+    }
+  }, [username]);
+
+  useEffect(() => {
+    if (username) {
+      localStorage.setItem(`carrito_${username}`, JSON.stringify(carrito));
+    }
+  }, [carrito, username]);
 
   const agregarAlCarrito = (item: InstrumentoProps["item"]) => {
-    const itemEnCarrito = carrito.find((i) => i.id === item.id);
-    if (itemEnCarrito) {
-      setCarrito(carrito.map((i) => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i));
-    } else {
-      setCarrito([...carrito, { ...item, cantidad: 1 }]);
-    }
+    setCarrito(prev => {
+      const existingItem = prev.find(i => i.id === item.id);
+      if (existingItem) {
+        return prev.map(i => i.id === item.id ? { ...i, cantidad: i.cantidad + 1 } : i);
+      } else {
+        return [...prev, { ...item, cantidad: 1 }];
+      }
+    });
   };
 
   const reducirCantidadCarrito = (id: number) => {
-    const itemEnCarrito = carrito.find((i) => i.id === id);
-    if (itemEnCarrito) {
-      if (itemEnCarrito.cantidad > 1) {
-        setCarrito(carrito.map((i) => i.id === id ? { ...i, cantidad: i.cantidad - 1 } : i));
+    setCarrito(prev => {
+      const existingItem = prev.find(i => i.id === id);
+      if (existingItem && existingItem.cantidad > 1) {
+        return prev.map(i => i.id === id ? { ...i, cantidad: i.cantidad - 1 } : i);
       } else {
-        setCarrito(carrito.filter((i) => i.id !== id));
+        return prev.filter(i => i.id !== id);
       }
-    }
+    });
   };
 
   const eliminarDelCarrito = (id: number) => {
-    setCarrito(carrito.filter((i) => i.id !== id));
+    setCarrito(prev => prev.filter(i => i.id !== id));
   };
 
   const obtenerCantidadEnCarrito = (id: number) => {
-    const itemEnCarrito = carrito.find((i) => i.id === id);
-    return itemEnCarrito ? itemEnCarrito.cantidad : 0;
+    const item = carrito.find(i => i.id === id);
+    return item ? item.cantidad : 0;
   };
 
   const vaciarCarrito = () => {
@@ -52,8 +62,3 @@ export const CarritoProvider: React.FC<CarritoProviderProps> = ({ children }) =>
     </CarritoContext.Provider>
   );
 };
-
-type CarritoProviderProps = {
-  children: ReactNode;
-};
-export type { CarritoProviderProps };

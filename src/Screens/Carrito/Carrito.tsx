@@ -4,7 +4,7 @@ import { CarritoContext } from '../../Context/CarritoContext';
 import { Pedido, PedidoDetalle } from '../../Types/InstrumentoProps';
 import FadeInContent from '../FadeInContent/FadeInContent ';
 
-export const Carrito: React.FC = () => {
+const Carrito: React.FC = () => {
     const { carrito, vaciarCarrito, eliminarDelCarrito } = useContext(CarritoContext);
     const [pedidoGuardadoId, setPedidoGuardadoId] = useState<string | null>(null);
 
@@ -134,3 +134,5 @@ export const Carrito: React.FC = () => {
         </FadeInContent>
     );
 };
+
+export default Carrito;

@@ -1,29 +1,29 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { InstrumentoProps } from "../../Types/InstrumentoProps";
-import { Button, CardContent, CardMedia, Grid, Typography, IconButton } from '@mui/material';
-import Card from '@mui/joy/Card';
+import { Paper, Button, CardContent, CardMedia, Grid, Typography, IconButton } from '@mui/material';
 import { FaTruck } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { CarritoContext } from '../../Context/CarritoContext';
 import { Add, Remove } from '@mui/icons-material';
+import { useAuth } from '../../Context/AuthContext';
 
 export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
-  const [dimensions, setDimensions] = React.useState({ width: 0.1, height: 0.1 });
-  const cardRef = React.useRef<HTMLDivElement>(null);
-  const { agregarAlCarrito, reducirCantidadCarrito, obtenerCantidadEnCarrito } = useContext(
-    CarritoContext
-  );
+  const [dimensions, setDimensions] = useState({ width: 0.1, height: 0.1 });
+  const cardRef = useRef<HTMLDivElement>(null);
+  const { agregarAlCarrito, reducirCantidadCarrito, obtenerCantidadEnCarrito } = useContext(CarritoContext);
+  const { isLoggedIn } = useAuth();
+  const cantidadEnCarrito = isLoggedIn ? obtenerCantidadEnCarrito(item.id) : 0;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       if (cardRef.current) {
         const { width, height } = cardRef.current.getBoundingClientRect();
-        setDimensions({ width: width * 1, height: height * 1 });
+        setDimensions({ width: width * 1, height: height * 1.8 });
       }
     };
 
     handleResize();
-
+    
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -32,7 +32,7 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
   return (
     <Grid container spacing={2} sx={{ marginTop: '2%' }}>
       <Grid item xs={7} sx={{ marginLeft: '5%' }}>
-        <Card variant="plain" ref={cardRef}>
+        <Paper ref={cardRef} sx={{ border: 'none', boxShadow: 'none' }}>
           <CardMedia
             component="img"
             sx={{ width: dimensions.width, height: dimensions.height, flexShrink: 0, objectFit: 'contain' }}
@@ -41,14 +41,13 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
           />
           <CardContent>
             <Typography variant="body1" color="text.primary" fontFamily={"Segoe UI"}>
-              <p>Descripción:</p>
-              {item.descripcion}
+              <strong>Descripción:</strong> {item.descripcion}
             </Typography>
           </CardContent>
-        </Card>
+        </Paper>
       </Grid>
       <Grid item xs={4}>
-        <Card variant="outlined">
+        <Paper sx={{ border: 'none', boxShadow: 'none' }}>
           <CardContent sx={{ flex: '1 0 auto' }}>
             <Grid container spacing={0}>
               <Grid item xs={12}>
@@ -57,12 +56,12 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
                 </Typography>
               </Grid>
               <Grid item xs={12}>
-                <Typography variant="h5" color="text.primary" fontFamily={"Segoe UI"}>
+                <Typography variant="h5" component="h5" color="text.primary" fontFamily={"Segoe UI"}>
                   {item.instrumento}
                 </Typography>
               </Grid>
               <Grid item xs={12} sx={{ marginBottom: '5%', marginTop: '5%' }}>
-                <Typography variant="h3" color="text.primary" fontFamily={"sans-serif"}>
+                <Typography variant="h3" component="h3" color="text.primary" fontFamily={"sans-serif"}>
                   $ {item.precio}
                 </Typography>
               </Grid>
@@ -77,52 +76,39 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
                 </Typography>
               </Grid>
               {item.costoEnvio !== 'G' && (
-                <Grid item xs={12} sx={{ marginTop: '10%', marginBottom: '20%' }}>
+                <Grid item xs={12} sx={{ marginTop: '5%'}}>
                   <Typography variant="body2" color="text.primary" fontFamily={"sans-serif"}>
                     Costo Envio:
                   </Typography>
                   <Typography variant="body2" color="#D6913A" style={{ marginRight: '8px' }} fontFamily={"sans-serif"}>
-                    ${item.costoEnvio}
+                    Interior de Argentina: ${item.costoEnvio}
                   </Typography>
                 </Grid>
               )}
               {item.costoEnvio === 'G' && (
-                <Grid item xs={12} sx={{ marginTop: '10%', marginBottom: '20%' }}>
-                  <Typography variant="body2" color="text.primary" fontFamily={"sans-serif"}>
-                    Costo Envio:
-                  </Typography>
-                  <Typography variant="body2" color="#39B54A" fontFamily={"sans-serif"}>
-                    <FaTruck fontSize={'1.5vw'}/>    
-                    <small style={{fontSize:'1.1vw', marginLeft:'0.5vw'}}>Envio gratis </small>                                                     
+                <Grid item xs={12}>
+                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', color:'#39B54A', marginTop:'5%' }}>
+                    <FaTruck fontSize={'1.5vw'}/>
+                    <span style={{marginLeft:'0.5vw'}}>Envío gratis a todo el país</span>
                   </Typography>
                 </Grid>
               )}
-            </Grid>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item>
-                <IconButton
-                  color="primary"
-                  onClick={() => reducirCantidadCarrito(item.id)}
-                >
-                  <Remove />
-                </IconButton>
-              </Grid>
-              <Grid item>
-                <Typography variant="body1">
-                  {obtenerCantidadEnCarrito(item.id)}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <IconButton
-                  color="primary"
-                  onClick={() => agregarAlCarrito(item)}
-                >
-                  <Add />
-                </IconButton>
+              <Grid item xs={12} sx={{ marginBottom: '5%', marginTop:'5%' }}>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <IconButton onClick={() => reducirCantidadCarrito(item.id)} disabled={!isLoggedIn}>
+                    <Remove />
+                  </IconButton>
+                  <Typography variant="body1" sx={{ margin: '0 1rem' }}>
+                    {cantidadEnCarrito}
+                  </Typography>
+                  <IconButton onClick={() => agregarAlCarrito(item)} disabled={!isLoggedIn}>
+                    <Add />
+                  </IconButton>
+                </div>
               </Grid>
             </Grid>
           </CardContent>
-        </Card>
+        </Paper>
       </Grid>
     </Grid>
   );

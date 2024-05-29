@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { CardContent, CardMedia, Typography } from '@mui/material';
-import { Card } from '@mui/joy';
+import { Paper, CardContent, CardMedia, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 
 interface CarruselCardProps {
@@ -11,7 +10,7 @@ interface CarruselCardProps {
 
 const CarruselCard: React.FC<CarruselCardProps> = ({ id, imagen, instrumento }) => (
   <Link to={`/instrumento/${id}`} style={{ textDecoration: 'none' }}>
-    <Card variant="plain" sx={{ maxWidth: 345, marginTop: '2%' }}>
+    <Paper variant="outlined" sx={{ maxWidth: 345, marginTop: '2%', border: 'none', boxShadow: 'none' }}>
       <CardMedia
         component="img"
         image={`${imagen}`}
@@ -23,7 +22,7 @@ const CarruselCard: React.FC<CarruselCardProps> = ({ id, imagen, instrumento }) 
           {instrumento}
         </Typography>
       </CardContent>
-    </Card>
+    </Paper>
   </Link>
 );
 

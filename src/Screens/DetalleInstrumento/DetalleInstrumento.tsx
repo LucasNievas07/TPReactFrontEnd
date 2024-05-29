@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { InstrumentoCompleto } from "../../Components/Instrumento/InstrumentoCompleto";
-import FadeInContent from "../FadeInContent/FadeInContent ";
+import FadeInContent from '../FadeInContent/FadeInContent ';
 
-export const DetalleInstrumento = () => {
+const DetalleInstrumento: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [item, setItem] = useState<any>();
 
@@ -29,3 +29,5 @@ export const DetalleInstrumento = () => {
     </>
   );
 };
+
+export default DetalleInstrumento;

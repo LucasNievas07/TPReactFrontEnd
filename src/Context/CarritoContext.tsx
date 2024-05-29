@@ -1,6 +1,7 @@
 // CarritoContext.tsx
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { InstrumentoProps } from '../Types/InstrumentoProps';
+import { useAuth } from './AuthContext';
 
 export type CarritoItemType = {
   id: number;
@@ -31,7 +32,7 @@ type CarritoContextType = {
   vaciarCarrito: () => void;
 };
 
-export const CarritoContext = React.createContext<CarritoContextType>({
+export const CarritoContext = createContext<CarritoContextType>({
   carrito: [],
   agregarAlCarrito: () => {},
   reducirCantidadCarrito: () => {},

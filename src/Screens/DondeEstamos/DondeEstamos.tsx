@@ -1,6 +1,6 @@
 import FadeInContent from "../FadeInContent/FadeInContent "
 
-export const DondeEstamos = () => {
+const DondeEstamos: React.FC = () => {
   return (
     <>
       <FadeInContent>
@@ -12,3 +12,5 @@ export const DondeEstamos = () => {
     </>
   )
 }
+
+export default DondeEstamos;
