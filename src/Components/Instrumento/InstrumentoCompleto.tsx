@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import { InstrumentoProps } from "../../Types/InstrumentoProps";
-import { Paper, Button, CardContent, CardMedia, Grid, Typography, IconButton } from '@mui/material';
+import { Paper, CardContent, CardMedia, Grid, Typography, IconButton } from '@mui/material';
 import { FaTruck } from "react-icons/fa";
-import { IoBagCheckOutline } from "react-icons/io5";
 import { CarritoContext } from '../../Context/CarritoContext';
 import { Add, Remove } from '@mui/icons-material';
 import { useAuth } from '../../Context/AuthContext';

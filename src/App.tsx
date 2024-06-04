@@ -1,4 +1,4 @@
-// src/App.tsx
+//App.tsx
 import { AuthProvider } from "./Context/AuthContext";
 import { CarritoProvider } from "./Context/CarritoProvider";
 import Rutas from "./Rutas/Rutas";

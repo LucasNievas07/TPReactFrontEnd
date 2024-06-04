@@ -1,4 +1,3 @@
-// CarritoProvider.tsx
 import React, { useState, useEffect, ReactNode } from 'react';
 import { InstrumentoProps } from '../Types/InstrumentoProps';
 import { CarritoItemType, CarritoContext } from './CarritoContext';
@@ -8,11 +7,19 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
   const { username } = useAuth();
   const [carrito, setCarrito] = useState<CarritoItemType[]>([]);
 
-  useEffect(() => {
-    const storedCarrito = localStorage.getItem(`carrito_${username}`);
-    if (storedCarrito) {
-      setCarrito(JSON.parse(storedCarrito));
+  const cargarCarrito = () => {
+    if (username) {
+      const storedCarrito = localStorage.getItem(`carrito_${username}`);
+      if (storedCarrito) {
+        setCarrito(JSON.parse(storedCarrito));
+      } else {
+        setCarrito([]);
+      }
     }
+  };
+
+  useEffect(() => {
+    cargarCarrito();
   }, [username]);
 
   useEffect(() => {
@@ -54,6 +61,9 @@ export const CarritoProvider = ({ children }: { children: ReactNode }) => {
 
   const vaciarCarrito = () => {
     setCarrito([]);
+    if (username) {
+      localStorage.removeItem(`carrito_${username}`);
+    }
   };
 
   return (

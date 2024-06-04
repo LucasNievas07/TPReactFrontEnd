@@ -1,4 +1,4 @@
-import FadeInContent from "../FadeInContent/FadeInContent "
+import FadeInContent from "../FadeInContent/FadeInContent"
 
 const DondeEstamos: React.FC = () => {
   return (

@@ -5,9 +5,9 @@ export async function getData<T>(path: string): Promise<T> {
       if (!response.ok) {
         throw Error(response.statusText);
       }
-      return await response.json(); // Retorna los datos en formato JSON
+      return await response.json();
     } catch (error) {
-      return Promise.reject(error); // Rechaza la promesa con el error
+      return Promise.reject(error);
     }
   }
   
@@ -20,14 +20,14 @@ export async function getData<T>(path: string): Promise<T> {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
+        body: JSON.stringify(data), 
       });
       if (!response.ok) {
         throw Error(response.statusText);
       }
-      return await response.json(); // Retorna los datos en formato JSON
+      return await response.json(); 
     } catch (error) {
-      return Promise.reject(error); // Rechaza la promesa con el error
+      return Promise.reject(error); 
     }
   }
   
@@ -40,15 +40,15 @@ export async function getData<T>(path: string): Promise<T> {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data), // Convierte los datos a JSON y los envía en el cuerpo de la solicitud
+        body: JSON.stringify(data),
       });
   
       if (!response.ok) {
         throw Error(response.statusText);
       }
-      return await response.json(); // Retorna los datos en formato JSON
+      return await response.json();
     } catch (error) {
-      return Promise.reject(error); // Rechaza la promesa con el error
+      return Promise.reject(error);
     }
   }
   
@@ -65,6 +65,6 @@ export async function getData<T>(path: string): Promise<T> {
         throw Error(response.statusText);
       }
     } catch (error) {
-      console.error(error); // Imprime el error en la consola
+      console.error(error);
     }
   }

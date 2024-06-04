@@ -15,8 +15,10 @@ const pages = [
 ];
 
 export function Navbar() {
-  const { isLoggedIn, username, logout } = useAuth();
+  const { isLoggedIn, username, role, logout } = useAuth(); // Obtener el rol del usuario
   const navigate = useNavigate();
+
+  const isAdmin = role === 'Admin'; // Verificar si el rol es "Admin"
 
   return (
     <AppBar position="static">
@@ -34,6 +36,14 @@ export function Navbar() {
               <Typography variant="h6" color="inherit">{page.name}</Typography>
             </Link>
           ))}
+          {isLoggedIn && isAdmin && ( // Mostrar el enlace solo si está logueado y es Admin
+            <Link
+              to="/grilla"
+              style={{ textDecoration: 'none', color: 'inherit', marginRight: '20px' }}
+            >
+              <Typography variant="h6" color="inherit">Admin</Typography>
+            </Link>
+          )}
         </Box>
         {isLoggedIn ? (
           <>

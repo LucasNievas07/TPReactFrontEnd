@@ -1,33 +1,77 @@
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { Categoria, InstrumentoNoItem } from "../Types/InstrumentoProps";
+import { InstrumentoNoItemProps } from "../Types/InstrumentoProps";
 import { Box, Button, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getData, postData, putData } from "../Api/genericCalls";
+import { CategoriaProps } from "../Types/CategoriaProps";
+import { makeStyles } from '@mui/styles';
 
 interface FormInstrumentoProps {
-    existingInstrumento?: InstrumentoNoItem;
+    existingInstrumento?: InstrumentoNoItemProps;
     onClose: () => void;
+    onSave: () => void;
 }
+
+const useStyles = makeStyles({
+    root: {
+        backgroundColor: "#f0f0f0",
+        minHeight: "100vh",
+        padding: 0,
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    container: {
+        backgroundColor: "#ffffff",
+        padding: "20px",
+        boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
+        borderRadius: "8px",
+        marginTop: "20px",
+    },
+    button: {
+        backgroundColor: "#1976d2",
+        color: "#ffffff",
+        '&:hover': {
+            backgroundColor: "#115293",
+        },
+    },
+    modal: {
+        width: "50%",
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        backgroundColor: "#fff",
+        boxShadow: 24,
+        padding: "16px",
+        borderRadius: "10px",
+    },
+    filterButton: {
+        margin: "5px",
+    }
+});
 
 export const ModalInstrumento: React.FC<FormInstrumentoProps> = ({
     existingInstrumento,
     onClose,
 }) => {
+    const classes = useStyles();
     const handleSubmit = async (
-        values: InstrumentoNoItem, // Cambia el tipo de 'values'
-        formikHelpers: FormikHelpers<InstrumentoNoItem>
+        values: InstrumentoNoItemProps, // Cambia el tipo de 'values'
+        formikHelpers: FormikHelpers<InstrumentoNoItemProps>
     ) => {
         try {
             if (existingInstrumento) {
                 // Si existingInstrumento está definida, estamos editando un instrumento existente
                 //await editarInstrumento(values.item);
-                await putData<InstrumentoNoItem>("http://localhost:8080/instrumento/"+values.id, values)
+                await putData<InstrumentoNoItemProps>("http://localhost:8080/instrumento/"+values.id, values)
 
 
 
             } else {
                 // Si existingInstrumento no está definida, estamos creando un nuevo instrumento
-                await postData<InstrumentoNoItem>("http://localhost:8080/instrumento/create", values)
+                await postData<InstrumentoNoItemProps>("http://localhost:8080/instrumento/create", values)
             }
             onClose();
         } catch (error) {
@@ -38,13 +82,13 @@ export const ModalInstrumento: React.FC<FormInstrumentoProps> = ({
         formikHelpers.setSubmitting(false);
     };
 
-    const [categorias, setCategorias] = useState<Categoria[]>();
+    const [categorias, setCategorias] = useState<CategoriaProps[]>();
     const [selectedCategoria, setselectedCategoria] = useState(
         existingInstrumento ? existingInstrumento.categoria?.id?.toString() : ""
     );
     useEffect(() => {
         async function getDataCategorias() {
-            await getData<Categoria[]>("http://localhost:8080/categoria")
+            await getData<CategoriaProps[]>("http://localhost:8080/categoria")
                 .then((categoriaData) => {
                     setCategorias(categoriaData);
                     if (existingInstrumento && existingInstrumento.categoria) {
@@ -64,9 +108,9 @@ export const ModalInstrumento: React.FC<FormInstrumentoProps> = ({
                 marca: existingInstrumento ? existingInstrumento.marca : "",
                 modelo: existingInstrumento ? existingInstrumento.modelo : "",
                 imagen: existingInstrumento ? existingInstrumento.imagen : "",
-                precio: existingInstrumento ? existingInstrumento.precio : "",
+                precio: existingInstrumento ? existingInstrumento.precio : 0.0,
                 costoEnvio: existingInstrumento ? existingInstrumento.costoEnvio : "",
-                cantidadVendida: existingInstrumento ? existingInstrumento.cantidadVendida : "",
+                cantidadVendida: existingInstrumento ? existingInstrumento.cantidadVendida : 0,
                 descripcion: existingInstrumento ? existingInstrumento.descripcion : "",
                 categoria: existingInstrumento ? existingInstrumento.categoria : null,
             }}
@@ -84,6 +128,7 @@ export const ModalInstrumento: React.FC<FormInstrumentoProps> = ({
                             overflowX: "hidden",
                             p: 1,
                         }}
+                        className={classes.modal}
                     >
                         <h1 style={{ marginBottom: "30px" }}>
                             {existingInstrumento

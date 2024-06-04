@@ -1,3 +1,4 @@
+//Registro.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, TextField, Button, Typography, Box, FormControlLabel, Checkbox } from '@mui/material';

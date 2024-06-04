@@ -1,7 +1,6 @@
-// CarritoContext.tsx
-import React, { createContext, useContext } from 'react';
+//CarritoContext.tsx
+import { createContext } from 'react';
 import { InstrumentoProps } from '../Types/InstrumentoProps';
-import { useAuth } from './AuthContext';
 
 export type CarritoItemType = {
   id: number;
@@ -9,13 +8,12 @@ export type CarritoItemType = {
   marca: string;
   modelo: string;
   imagen: string;
-  precio: string;
+  precio: number; 
   costoEnvio: string;
-  cantidadVendida: string;
+  cantidadVendida: number;
   descripcion: string;
   categoria: Categoria | null;
   cantidad: number;
-  pedidoId?: number; // Agregamos la propiedad pedidoId para almacenar el ID del pedido
 };
 
 export type Categoria = {
@@ -27,7 +25,7 @@ type CarritoContextType = {
   carrito: CarritoItemType[];
   agregarAlCarrito: (item: InstrumentoProps["item"]) => void;
   reducirCantidadCarrito: (id: number) => void;
-  eliminarDelCarrito: (id: number) => void; // Nueva función para eliminar un artículo del carrito
+  eliminarDelCarrito: (id: number) => void;
   obtenerCantidadEnCarrito: (id: number) => number;
   vaciarCarrito: () => void;
 };
@@ -36,7 +34,7 @@ export const CarritoContext = createContext<CarritoContextType>({
   carrito: [],
   agregarAlCarrito: () => {},
   reducirCantidadCarrito: () => {},
-  eliminarDelCarrito: () => {}, // Inicialización de la nueva función
+  eliminarDelCarrito: () => {},
   obtenerCantidadEnCarrito: (id: number) => 0,
   vaciarCarrito: () => {},
 });

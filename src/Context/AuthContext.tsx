@@ -1,5 +1,6 @@
-// src/Context/AuthContext.tsx
-import React, { createContext, useState, ReactNode, useContext, useEffect } from 'react';
+//AuthContext.tsx
+import { createContext, useState, ReactNode, useContext } from 'react';
+import { CarritoContext } from './CarritoContext';
 
 interface AuthContextType {
   isLoggedIn: boolean;
@@ -12,6 +13,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
+  const { vaciarCarrito } = useContext(CarritoContext);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!localStorage.getItem('user'));
   const [username, setUsername] = useState<string | null>(
     localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!).nombreUsuario : null
@@ -25,10 +27,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUsername(user.nombreUsuario);
     setRole(user.rol);
     setIsLoggedIn(true);
+    localStorage.removeItem(`carrito_${username}`);  // Limpia el carrito del usuario anterior
   };
 
   const logout = () => {
     localStorage.removeItem('user');
+    vaciarCarrito(); // Limpia el carrito al hacer logout
     setIsLoggedIn(false);
     setUsername(null);
     setRole(null);

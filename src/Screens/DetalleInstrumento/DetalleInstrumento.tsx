@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { InstrumentoCompleto } from "../../Components/Instrumento/InstrumentoCompleto";
-import FadeInContent from '../FadeInContent/FadeInContent ';
+import FadeInContent from '../FadeInContent/FadeInContent';
 
 const DetalleInstrumento: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,7 +19,7 @@ const DetalleInstrumento: React.FC = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, []);
 
   return (
     <>
