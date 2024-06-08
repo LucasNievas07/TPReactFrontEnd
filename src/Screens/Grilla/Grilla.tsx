@@ -62,6 +62,32 @@ const Grilla: React.FC = () => {
     fetchDataCategorias();
   }, []);
 
+  const handleGeneratePdf = async (id: number) => {
+    try {
+      const response = await fetch(`http://localhost:8080/instrumento/${id}/pdf`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/pdf',
+        },
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `Instrumento_${id}.pdf`);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode?.removeChild(link);
+      } else {
+        console.error('Error generating PDF:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+    }
+  };
+
   const filteredData = data.filter(
     (item) => selectedCategoria === 'todos' || item.categoria?.id?.toString() === selectedCategoria
   );
@@ -146,6 +172,9 @@ const Grilla: React.FC = () => {
                 </Button>
                 <Button onClick={() => handleDelete(item)}>
                   <FaRegTrashAlt />
+                </Button>
+                <Button onClick={() => handleGeneratePdf(item.id)}>
+                  <Typography variant="body2">PDF</Typography>
                 </Button>
               </Grid>
             </Grid>

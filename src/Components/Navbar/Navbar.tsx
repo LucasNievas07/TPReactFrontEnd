@@ -36,13 +36,21 @@ export function Navbar() {
               <Typography variant="h6" color="inherit">{page.name}</Typography>
             </Link>
           ))}
-          {isLoggedIn && isAdmin && ( // Mostrar el enlace solo si está logueado y es Admin
-            <Link
-              to="/grilla"
-              style={{ textDecoration: 'none', color: 'inherit', marginRight: '20px' }}
-            >
-              <Typography variant="h6" color="inherit">Admin</Typography>
-            </Link>
+          {isLoggedIn && isAdmin && ( // Mostrar los enlaces solo si está logueado y es Admin
+            <>
+              <Link
+                to="/grilla"
+                style={{ textDecoration: 'none', color: 'inherit', marginRight: '20px' }}
+              >
+                <Typography variant="h6" color="inherit">Grilla</Typography>
+              </Link>
+              <Link
+                to="/reportes"
+                style={{ textDecoration: 'none', color: 'inherit', marginRight: '20px' }}
+              >
+                <Typography variant="h6" color="inherit">Reportes</Typography>
+              </Link>
+            </>
           )}
         </Box>
         {isLoggedIn ? (

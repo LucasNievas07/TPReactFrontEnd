@@ -1,11 +1,9 @@
-//Rutas.tsx
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { Suspense, lazy } from 'react';
 import Navbar from '../Components/Navbar/Navbar';
 import { useAuth } from '../Context/AuthContext';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Grilla from '../Screens/Grilla/Grilla';
 
 const Home = lazy(() => import('../Screens/Home/Home'));
 const DondeEstamos = lazy(() => import('../Screens/DondeEstamos/DondeEstamos'));
@@ -14,10 +12,17 @@ const DetalleInstrumento = lazy(() => import('../Screens/DetalleInstrumento/Deta
 const Carrito = lazy(() => import('../Screens/Carrito/Carrito'));
 const Login = lazy(() => import('../Screens/User/Login'));
 const Registro = lazy(() => import('../Screens/User/Registro'));
+const Grilla = lazy(()=> import('../Screens/Grilla/Grilla'));
+const Reportes = lazy(()=> import('../Screens/Reportes/Reportes'));
 
 const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const { isLoggedIn } = useAuth();
   return isLoggedIn ? children : <Navigate to="/login" />;
+};
+
+const AdminRoute = ({ children }: { children: JSX.Element }) => {
+  const { isLoggedIn, role } = useAuth();
+  return isLoggedIn && role === 'Admin' ? children : <Navigate to="/login" />;
 };
 
 const theme = createTheme({
@@ -41,7 +46,8 @@ export const Rutas = () => (
             <Route path="/carrito" element={<ProtectedRoute><Carrito /></ProtectedRoute>} />
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
-            <Route path="/grilla" element={<Grilla />} />
+            <Route path="/grilla" element={<AdminRoute><Grilla /></AdminRoute>} />
+            <Route path="/reportes" element={<AdminRoute><Reportes /></AdminRoute>} />
           </Routes>
         </Suspense>
       </div>

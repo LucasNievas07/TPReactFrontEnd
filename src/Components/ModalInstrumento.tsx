@@ -4,7 +4,6 @@ import { Box, Button, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getData, postData, putData } from "../Api/genericCalls";
 import { CategoriaProps } from "../Types/CategoriaProps";
-import { makeStyles } from '@mui/styles';
 
 interface FormInstrumentoProps {
     existingInstrumento?: InstrumentoNoItemProps;
@@ -12,51 +11,10 @@ interface FormInstrumentoProps {
     onSave: () => void;
 }
 
-const useStyles = makeStyles({
-    root: {
-        backgroundColor: "#f0f0f0",
-        minHeight: "100vh",
-        padding: 0,
-        margin: 0,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    container: {
-        backgroundColor: "#ffffff",
-        padding: "20px",
-        boxShadow: "0px 0px 10px rgba(0,0,0,0.1)",
-        borderRadius: "8px",
-        marginTop: "20px",
-    },
-    button: {
-        backgroundColor: "#1976d2",
-        color: "#ffffff",
-        '&:hover': {
-            backgroundColor: "#115293",
-        },
-    },
-    modal: {
-        width: "50%",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        backgroundColor: "#fff",
-        boxShadow: 24,
-        padding: "16px",
-        borderRadius: "10px",
-    },
-    filterButton: {
-        margin: "5px",
-    }
-});
-
 export const ModalInstrumento: React.FC<FormInstrumentoProps> = ({
     existingInstrumento,
     onClose,
 }) => {
-    const classes = useStyles();
     const handleSubmit = async (
         values: InstrumentoNoItemProps, // Cambia el tipo de 'values'
         formikHelpers: FormikHelpers<InstrumentoNoItemProps>
@@ -128,7 +86,6 @@ export const ModalInstrumento: React.FC<FormInstrumentoProps> = ({
                             overflowX: "hidden",
                             p: 1,
                         }}
-                        className={classes.modal}
                     >
                         <h1 style={{ marginBottom: "30px" }}>
                             {existingInstrumento
