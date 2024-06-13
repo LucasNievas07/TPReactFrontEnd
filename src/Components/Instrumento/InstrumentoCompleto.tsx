@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext } from 'react';
 import { InstrumentoProps } from "../../Types/InstrumentoProps";
 import { Paper, CardContent, CardMedia, Grid, Typography, IconButton } from '@mui/material';
 import { FaTruck } from "react-icons/fa";
@@ -6,35 +6,24 @@ import { CarritoContext } from '../../Context/CarritoContext';
 import { Add, Remove } from '@mui/icons-material';
 import { useAuth } from '../../Context/AuthContext';
 
+const imageStyle = {
+  width: '100%', 
+  height: '300px', 
+  objectFit: 'contain', 
+};
+
 export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
-  const [dimensions, setDimensions] = useState({ width: 0.1, height: 0.1 });
-  const cardRef = useRef<HTMLDivElement>(null);
   const { agregarAlCarrito, reducirCantidadCarrito, obtenerCantidadEnCarrito } = useContext(CarritoContext);
   const { isLoggedIn } = useAuth();
   const cantidadEnCarrito = isLoggedIn ? obtenerCantidadEnCarrito(item.id) : 0;
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (cardRef.current) {
-        const { width, height } = cardRef.current.getBoundingClientRect();
-        setDimensions({ width: width * 1, height: height * 1.8 });
-      }
-    };
-
-    handleResize();
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
     <Grid container spacing={2} sx={{ marginTop: '2%' }}>
       <Grid item xs={7} sx={{ marginLeft: '5%' }}>
-        <Paper ref={cardRef} sx={{ border: 'none', boxShadow: 'none' }}>
+        <Paper sx={{ border: 'none', boxShadow: 'none' }}>
           <CardMedia
             component="img"
-            sx={{ width: dimensions.width, height: dimensions.height, flexShrink: 0, objectFit: 'contain' }}
+            sx={imageStyle}
             image={`${item.imagen}`}
             alt={item.instrumento}
           />
@@ -75,7 +64,7 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
                 </Typography>
               </Grid>
               {item.costoEnvio !== 'G' && (
-                <Grid item xs={12} sx={{ marginTop: '5%'}}>
+                <Grid item xs={12} sx={{ marginTop: '5%' }}>
                   <Typography variant="body2" color="text.primary" fontFamily={"sans-serif"}>
                     Costo Envio:
                   </Typography>
@@ -86,13 +75,13 @@ export const InstrumentoCompleto: React.FC<InstrumentoProps> = ({ item }) => {
               )}
               {item.costoEnvio === 'G' && (
                 <Grid item xs={12}>
-                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', color:'#39B54A', marginTop:'5%' }}>
-                    <FaTruck fontSize={'1.5vw'}/>
-                    <span style={{marginLeft:'0.5vw'}}>Envío gratis a todo el país</span>
+                  <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', color: '#39B54A', marginTop: '5%' }}>
+                    <FaTruck fontSize={'1.5vw'} />
+                    <span style={{ marginLeft: '0.5vw' }}>Envío gratis a todo el país</span>
                   </Typography>
                 </Grid>
               )}
-              <Grid item xs={12} sx={{ marginBottom: '5%', marginTop:'5%' }}>
+              <Grid item xs={12} sx={{ marginBottom: '5%', marginTop: '5%' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                   <IconButton onClick={() => reducirCantidadCarrito(item.id)} disabled={!isLoggedIn}>
                     <Remove />

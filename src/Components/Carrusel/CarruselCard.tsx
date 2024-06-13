@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Paper, CardContent, CardMedia, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Paper, CardMedia } from '@mui/material';
 
 interface CarruselCardProps {
   id: string;
@@ -8,7 +7,7 @@ interface CarruselCardProps {
   instrumento: string;
 }
 
-const CarruselCard: React.FC<CarruselCardProps> = ({ id, imagen, instrumento }) => (
+const CarruselCard: React.FC<CarruselCardProps> = ({ imagen, instrumento }) => (
   <Paper variant="outlined" sx={{ maxWidth: '100%', marginTop: '2%', border: 'none', boxShadow: 'none' }}>
     <CardMedia
       component="img"

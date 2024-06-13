@@ -1,4 +1,3 @@
-import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,10 +14,10 @@ const pages = [
 ];
 
 export function Navbar() {
-  const { isLoggedIn, username, role, logout } = useAuth(); // Obtener el rol del usuario
+  const { isLoggedIn, username, role, logout } = useAuth(); 
   const navigate = useNavigate();
 
-  const isAdmin = role === 'Admin'; // Verificar si el rol es "Admin"
+  const isAdmin = role === 'Admin'; 
 
   return (
     <AppBar position="static">
@@ -36,7 +35,7 @@ export function Navbar() {
               <Typography variant="h6" color="inherit">{page.name}</Typography>
             </Link>
           ))}
-          {isLoggedIn && isAdmin && ( // Mostrar los enlaces solo si está logueado y es Admin
+          {isLoggedIn && isAdmin && ( 
             <>
               <Link
                 to="/grilla"

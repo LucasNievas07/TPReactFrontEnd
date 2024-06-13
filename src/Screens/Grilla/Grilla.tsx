@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, Select, MenuItem, SelectChangeEvent, Box, Grid, Typography } from '@mui/material';
+import { Button, Modal, Select, MenuItem, SelectChangeEvent, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from '@mui/material';
 import { ModalInstrumento } from '../../Components/ModalInstrumento';
 import { InstrumentoNoItemProps } from '../../Types/InstrumentoProps';
 import { deleteData, getData } from '../../Api/genericCalls';
@@ -119,6 +119,7 @@ const Grilla: React.FC = () => {
           onChange={(event: SelectChangeEvent) => {
             setSelectedCategoria(event.target.value);
           }}
+          sx={{ margin: '2%' }}
         >
           <MenuItem value="todos">Todos</MenuItem>
           {categorias.map((categoria: CategoriaProps) => (
@@ -129,72 +130,77 @@ const Grilla: React.FC = () => {
         </Select>
 
         <Box sx={{ marginTop: '2%', marginBottom: '2%', marginLeft: '8%', marginRight: '4%', width: '80%' }}>
-          <Grid container spacing={2}>
-            <Grid item xs={2}>
-              <Typography variant="h6">Instrumento</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography variant="h6">Marca</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography variant="h6">Modelo</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography variant="h6">Precio</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography variant="h6">Categoría</Typography>
-            </Grid>
-            <Grid item xs={2}>
-              <Typography variant="h6">Acciones</Typography>
-            </Grid>
-          </Grid>
-          {filteredData.map((item: InstrumentoNoItemProps) => (
-            <Grid container spacing={2} key={item.id}>
-              <Grid item xs={2}>
-                <Typography>{item.instrumento}</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>{item.marca}</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>{item.modelo}</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>{item.precio}</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Typography>{item.categoria?.denominacion}</Typography>
-              </Grid>
-              <Grid item xs={2}>
-                <Button onClick={() => handleSelection(item)}>
-                  <LuPencil />
-                </Button>
-                <Button onClick={() => handleDelete(item)}>
-                  <FaRegTrashAlt />
-                </Button>
-                <Button onClick={() => handleGeneratePdf(item.id)}>
-                  <Typography variant="body2">PDF</Typography>
-                </Button>
-              </Grid>
-            </Grid>
-          ))}
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center', minWidth: '100px' }}>Instrumento</TableCell>
+                  <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center', minWidth: '100px' }}>Marca</TableCell>
+                  <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center', minWidth: '100px' }}>Modelo</TableCell>
+                  <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center', minWidth: '100px' }}>Precio</TableCell>
+                  <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center', minWidth: '100px' }}>Categoría</TableCell>
+                  <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold', textAlign: 'center', minWidth: '150px' }}>Acciones</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredData.map((item: InstrumentoNoItemProps) => (
+                  <TableRow key={item.id}>
+                    <TableCell sx={{ textAlign: 'center' }}>{item.instrumento}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>{item.marca}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>{item.modelo}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>{item.precio}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>{item.categoria?.denominacion}</TableCell>
+                    <TableCell sx={{ textAlign: 'center' }}>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 1 }}>
+                          <Button variant='outlined' onClick={() => handleSelection(item)}>
+                            <LuPencil />
+                          </Button>
+                          <Button variant='outlined' onClick={() => handleDelete(item)}>
+                            <FaRegTrashAlt />
+                          </Button>
+                        </Box>
+                        <Button variant='contained' color='error' onClick={() => handleGeneratePdf(item.id)}>
+                          <Typography variant="body2" sx={{fontSize:13}}>Generar PDF</Typography>
+                        </Button>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
         
         <Modal
           open={open}
           onClose={handleClose}
         >
-          <Box>
-            <ModalInstrumento
-              existingInstrumento={selectedInstrumento}
-              onClose={handleClose}
-              onSave={() => {
-                handleClose();
-                // Actualizar la lista de instrumentos después de guardar
-                // fetchData();
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              minHeight: '100vh',
+            }}
+          >
+            <Box
+              sx={{
+                width: '60%',
+                backgroundColor: 'white',
+                padding: 4,
+                borderRadius: 2,
+                boxShadow: 24,
               }}
-            />
+            >
+              <ModalInstrumento
+                existingInstrumento={selectedInstrumento}
+                onClose={handleClose}
+                onSave={() => {
+                  handleClose();
+                }}
+              />
+            </Box>
           </Box>
         </Modal>
       </>

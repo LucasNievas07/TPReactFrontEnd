@@ -4,7 +4,6 @@ import CarruselCard from "./CarruselCard";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Carrusel = () => {
-  // Lista de URLs de imágenes hardcodeadas
   const [data] = useState([
     {
       id: "1",

@@ -1,4 +1,3 @@
-//AuthContext.tsx
 import { createContext, useState, ReactNode, useContext } from 'react';
 import { CarritoContext } from './CarritoContext';
 
@@ -27,12 +26,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUsername(user.nombreUsuario);
     setRole(user.rol);
     setIsLoggedIn(true);
-    localStorage.removeItem(`carrito_${username}`);  // Limpia el carrito del usuario anterior
+    localStorage.removeItem(`carrito_${username}`);
   };
 
   const logout = () => {
     localStorage.removeItem('user');
-    vaciarCarrito(); // Limpia el carrito al hacer logout
+    vaciarCarrito();
     setIsLoggedIn(false);
     setUsername(null);
     setRole(null);

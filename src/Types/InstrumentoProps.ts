@@ -1,4 +1,3 @@
-//InstrumentoProps.ts
 import { CategoriaProps } from "./CategoriaProps";
 
 export interface InstrumentoProps {

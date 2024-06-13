@@ -1,4 +1,3 @@
-//Login.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
@@ -42,7 +41,7 @@ const Login: React.FC = () => {
               margin="normal"
               value={nombreUsuario}
               onChange={(e) => setNombreUsuario(e.target.value)}
-              required  // Campo obligatorio
+              required
             />
             <TextField
               label="Clave"
@@ -51,7 +50,7 @@ const Login: React.FC = () => {
               margin="normal"
               value={clave}
               onChange={(e) => setClave(e.target.value)}
-              required  // Campo obligatorio
+              required
             />
             <Button
               type="submit"

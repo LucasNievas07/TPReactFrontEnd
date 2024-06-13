@@ -1,4 +1,3 @@
-//Registro.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, TextField, Button, Typography, Box, FormControlLabel, Checkbox } from '@mui/material';
@@ -39,7 +38,7 @@ const Registro: React.FC = () => {
               margin="normal"
               value={nombreUsuario}
               onChange={(e) => setNombreUsuario(e.target.value)}
-              required  // Campo obligatorio
+              required
             />
             <TextField
               label="Clave"
@@ -48,7 +47,7 @@ const Registro: React.FC = () => {
               margin="normal"
               value={clave}
               onChange={(e) => setClave(e.target.value)}
-              required  // Campo obligatorio
+              required
             />
             <FormControlLabel
               control={<Checkbox checked={esAdmin} onChange={(e) => setEsAdmin(e.target.checked)} />}

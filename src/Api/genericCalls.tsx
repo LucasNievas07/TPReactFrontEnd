@@ -1,4 +1,3 @@
-// Función generica para obtener datos mediante una solicitud GET
 export async function getData<T>(path: string): Promise<T> {
     try {
       const response = await fetch(`${path}`);
@@ -10,8 +9,7 @@ export async function getData<T>(path: string): Promise<T> {
       return Promise.reject(error);
     }
   }
-  
-  // Función generica para enviar datos mediante una solicitud POST
+
   export async function postData<T>(path: string, data: T): Promise<T> {
     try {
       const response = await fetch(`${path}`, {
@@ -30,8 +28,7 @@ export async function getData<T>(path: string): Promise<T> {
       return Promise.reject(error); 
     }
   }
-  
-  // Función generica para actualizar datos mediante una solicitud PUT
+
   export async function putData<T>(path: string, data: T): Promise<T> {
     try {
       const response = await fetch(`${path}`, {
@@ -51,8 +48,7 @@ export async function getData<T>(path: string): Promise<T> {
       return Promise.reject(error);
     }
   }
-  
-  // Función generica para eliminar datos mediante una solicitud DELETE
+
   export async function deleteData(path: string) {
     try {
       const response = await fetch(`${path}`, {

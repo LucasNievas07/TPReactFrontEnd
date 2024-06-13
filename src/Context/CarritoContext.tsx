@@ -1,4 +1,3 @@
-//CarritoContext.tsx
 import { createContext } from 'react';
 import { InstrumentoProps } from '../Types/InstrumentoProps';
 

@@ -1,4 +1,3 @@
-//PedidoProps.ts
 import { InstrumentoNoItemProps } from "./InstrumentoProps";
 
 export interface PedidoProps {

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Bar, Pie } from 'react-chartjs-2';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button, TextField, Typography } from '@mui/material';
 import 'chart.js/auto';
 import * as XLSX from 'xlsx';
-import { PedidoProps } from '../../Types/PedidoProps';
 import { getData } from '../../Api/genericCalls';
 
 const Reportes: React.FC = () => {
@@ -42,33 +41,32 @@ const Reportes: React.FC = () => {
 
   const handleGenerateReport = async () => {
     try {
-        const pedidosReporte = await getData<any[]>(`http://localhost:8080/pedido/reportes/detallado?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
-        console.log("PedidosReporte", pedidosReporte);
+      const pedidosReporte = await getData<any[]>(`http://localhost:8080/pedido/reportes/detallado?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
+      console.log("PedidosReporte", pedidosReporte);
 
-        if (pedidosReporte.length === 0) {
-            console.error("No se encontraron pedidos en el rango de fechas seleccionado.");
-            return;
-        }
+      if (pedidosReporte.length === 0) {
+        console.error("No se encontraron pedidos en el rango de fechas seleccionado.");
+        return;
+      }
 
-        const reportData = pedidosReporte.map(pedido => ({
-            'Fecha Pedido': pedido.fechaPedido,
-            'Instrumento': pedido.instrumento,
-            'Marca': pedido.marca,
-            'Modelo': pedido.modelo,
-            'Cantidad': pedido.cantidad,
-            'Precio': pedido.precio,
-            'Subtotal': pedido.subtotal
-        }));
+      const reportData = pedidosReporte.map(pedido => ({
+        'Fecha Pedido': pedido.fechaPedido,
+        'Instrumento': pedido.instrumento,
+        'Marca': pedido.marca,
+        'Modelo': pedido.modelo,
+        'Cantidad': pedido.cantidad,
+        'Precio': pedido.precio,
+        'Subtotal': pedido.subtotal
+      }));
 
-        const worksheet = XLSX.utils.json_to_sheet(reportData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte");
-        XLSX.writeFile(workbook, "ReportePedidos.xlsx");
+      const worksheet = XLSX.utils.json_to_sheet(reportData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte");
+      XLSX.writeFile(workbook, "ReportePedidos.xlsx");
     } catch (error) {
-        console.error("Error generating report:", error);
+      console.error("Error generating report:", error);
     }
-};
-  
+  };
 
   const chartOptions = {
     maintainAspectRatio: false,
@@ -100,51 +98,63 @@ const Reportes: React.FC = () => {
           variant="contained"
           color="primary"
           onClick={handleGenerateReport}
+          sx={{
+            '&:hover': {
+              backgroundColor: 'white',
+              color: '#1976d2'
+            }
+          }}
+          disabled={pedidosPorMes.length === 0 && pedidosPorInstrumento.length === 0}
         >
           Generar Reporte
         </Button>
       </Box>
 
-      <div>
-        <h3>Pedidos por Mes y Año</h3>
-        <div style={{ width: '80%', height: '25rem', margin: 'auto' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '3%' }}>
+        <Box sx={{ width: '45%', height: '25rem', marginLeft:'4%' }}>
+          <Typography variant="h5" component="h5" sx={{ marginLeft: '30%' }}>Pedidos por Mes y Año</Typography>
           {pedidosPorMes.length > 0 ? (
-            <Bar data={{
-              labels: pedidosPorMes.map(item => item.mesAnio),
-              datasets: [{
-                label: 'Cantidad de Pedidos',
-                data: pedidosPorMes.map(item => item.cantidad),
-                backgroundColor: 'rgba(75, 192, 192, 0.6)'
-              }]
-            }} options={chartOptions} />
+            <Bar
+              data={{
+                labels: pedidosPorMes.map(item => item.mesAnio),
+                datasets: [{
+                  label: 'Cantidad de Pedidos',
+                  data: pedidosPorMes.map(item => item.cantidad),
+                  backgroundColor: 'rgba(75, 192, 192, 0.6)'
+                }]
+              }}
+              options={chartOptions}
+            />
           ) : (
-            <p>No hay datos disponibles para el rango de fechas seleccionado.</p>
+            <p style={{ marginLeft: '12%' }}>No hay datos disponibles para el rango de fechas seleccionado.</p>
           )}
-        </div>
-      </div>
-      <div>
-        <h3 style={{ marginTop: '3%' }}>Pedidos por Instrumento</h3>
-        <div style={{ width: '60%', height: '25rem', margin: 'auto' }}>
+        </Box>
+
+        <Box sx={{ width: '45%', height: '25rem', marginRight:'2%' }}>
+          <Typography variant="h5" component="h5" sx={{ marginLeft: '28%' }}>Pedidos por Instrumento</Typography>
           {pedidosPorInstrumento.length > 0 ? (
-            <Pie data={{
-              labels: pedidosPorInstrumento.map(item => item.instrumento),
-              datasets: [{
-                data: pedidosPorInstrumento.map(item => item.cantidad),
-                backgroundColor: [
-                  '#FF6384',
-                  '#36A2EB',
-                  '#FFCE56',
-                  '#FF5733',
-                  '#33FF57',
-                  '#3357FF'
-                ]
-              }]
-            }} options={chartOptions} />
+            <Pie
+              data={{
+                labels: pedidosPorInstrumento.map(item => item.instrumento),
+                datasets: [{
+                  data: pedidosPorInstrumento.map(item => item.cantidad),
+                  backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#FF5733',
+                    '#33FF57',
+                    '#3357FF'
+                  ]
+                }]
+              }}              
+              options={chartOptions}
+            />
           ) : (
-            <p>No hay datos disponibles para el rango de fechas seleccionado.</p>
+            <p style={{ marginLeft: '12%' }}>No hay datos disponibles para el rango de fechas seleccionado.</p>
           )}
-        </div>
-      </div>
+        </Box>
+      </Box>
     </div>
   );
 }
