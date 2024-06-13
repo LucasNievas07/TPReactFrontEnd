@@ -42,32 +42,32 @@ const Reportes: React.FC = () => {
 
   const handleGenerateReport = async () => {
     try {
-      const pedidosReporte = await getData<any[]>(`http://localhost:8080/pedido/reportes/detallado?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
-      console.log("PedidosReporte", pedidosReporte);
-  
-      if (pedidosReporte.length === 0) {
-        console.error("No se encontraron pedidos en el rango de fechas seleccionado.");
-        return;
-      }
-  
-      const reportData = pedidosReporte.map(pedido => ({
-        'Fecha Pedido': pedido.fechaPedido,
-        'Instrumento': pedido.instrumento,
-        'Marca': pedido.marca,
-        'Modelo': pedido.modelo,
-        'Cantidad': pedido.cantidad,
-        'Precio': pedido.precio,
-        'Subtotal': pedido.subtotal
-      }));
-  
-      const worksheet = XLSX.utils.json_to_sheet(reportData);
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte");
-      XLSX.writeFile(workbook, "ReportePedidos.xlsx");
+        const pedidosReporte = await getData<any[]>(`http://localhost:8080/pedido/reportes/detallado?fechaDesde=${fechaDesde}&fechaHasta=${fechaHasta}`);
+        console.log("PedidosReporte", pedidosReporte);
+
+        if (pedidosReporte.length === 0) {
+            console.error("No se encontraron pedidos en el rango de fechas seleccionado.");
+            return;
+        }
+
+        const reportData = pedidosReporte.map(pedido => ({
+            'Fecha Pedido': pedido.fechaPedido,
+            'Instrumento': pedido.instrumento,
+            'Marca': pedido.marca,
+            'Modelo': pedido.modelo,
+            'Cantidad': pedido.cantidad,
+            'Precio': pedido.precio,
+            'Subtotal': pedido.subtotal
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(reportData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Reporte");
+        XLSX.writeFile(workbook, "ReportePedidos.xlsx");
     } catch (error) {
-      console.error("Error generating report:", error);
+        console.error("Error generating report:", error);
     }
-  };
+};
   
 
   const chartOptions = {
